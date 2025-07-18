@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Prompt Suite Pro - Universal Business Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .category-card {
+            transition: all 0.3s ease;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg">
+    <!-- Header -->
+    <header class="glassmorphism text-white p-6 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center font-bold text-lg">
+                    AI
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold">AI Prompt Suite Pro</h1>
+                    <p class="text-sm opacity-90">Universal Business Edition</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <button id="saveBtn" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300">
+                    💾 Speichern
+                </button>
+                <button id="historyBtn" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300">
+                    📜 Verlauf
+                </button>
+                <button id="exportBtn" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300">
+                    📤 Export
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto p-6">
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-white text-center">
+                <div class="text-2xl font-bold">12</div>
+                <div class="text-sm opacity-80">Kategorien</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-white text-center">
+                <div class="text-2xl font-bold">147</div>
+                <div class="text-sm opacity-80">Templates</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-white text-center">
+                <div class="text-2xl font-bold" id="promptsCreated">0</div>
+                <div class="text-sm opacity-80">Prompts erstellt</div>
+            </div>
+            <div class="bg-white/10 backdrop-blur-lg rounded-xl p-4 text-white text-center">
+                <div class="text-2xl font-bold">∞</div>
+                <div class="text-sm opacity-80">Möglichkeiten</div>
+            </div>
+        </div>
+
+        <!-- Category Selection -->
+        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 p-6 text-white">
+                <h2 class="text-3xl font-bold mb-2">🚀 Wähle deine Business-Kategorie</h2>
+                <p class="opacity-90">Über 147 professionelle Prompt-Templates für jede Branche</p>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Marketing & Advertising -->
+                    <div class="category-card bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('marketing')">
+                        <div class="text-3xl mb-3">📈</div>
+                        <h3 class="font-bold text-lg mb-2">Marketing & Ads</h3>
+                        <p class="text-sm opacity-90">Facebook, Google, Instagram Ads, Email Marketing</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">23 Templates</div>
+                    </div>
+
+                    <!-- Sales & Vertrieb -->
+                    <div class="category-card bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('sales')">
+                        <div class="text-3xl mb-3">💰</div>
+                        <h3 class="font-bold text-lg mb-2">Sales & Vertrieb</h3>
+                        <p class="text-sm opacity-90">Cold Outreach, Sales Letters, Closing Scripts</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">18 Templates</div>
+                    </div>
+
+                    <!-- Content Creation -->
+                    <div class="category-card bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('content')">
+                        <div class="text-3xl mb-3">✍️</div>
+                        <h3 class="font-bold text-lg mb-2">Content Creation</h3>
+                        <p class="text-sm opacity-90">Blog Posts, YouTube, Social Media, Newsletter</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">31 Templates</div>
+                    </div>
+
+                    <!-- Business Development -->
+                    <div class="category-card bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('business')">
+                        <div class="text-3xl mb-3">🏢</div>
+                        <h3 class="font-bold text-lg mb-2">Business Dev</h3>
+                        <p class="text-sm opacity-90">Pitch Decks, Business Plans, Investoren</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">15 Templates</div>
+                    </div>
+
+                    <!-- E-Commerce -->
+                    <div class="category-card bg-gradient-to-br from-pink-500 to-pink-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('ecommerce')">
+                        <div class="text-3xl mb-3">🛒</div>
+                        <h3 class="font-bold text-lg mb-2">E-Commerce</h3>
+                        <p class="text-sm opacity-90">Produktbeschreibungen, Shop-Texte, Reviews</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">19 Templates</div>
+                    </div>
+
+                    <!-- SaaS & Tech -->
+                    <div class="category-card bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('saas')">
+                        <div class="text-3xl mb-3">💻</div>
+                        <h3 class="font-bold text-lg mb-2">SaaS & Tech</h3>
+                        <p class="text-sm opacity-90">Features, Dokumentation, User Onboarding</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">21 Templates</div>
+                    </div>
+
+                    <!-- Consulting -->
+                    <div class="category-card bg-gradient-to-br from-teal-500 to-teal-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('consulting')">
+                        <div class="text-3xl mb-3">🎯</div>
+                        <h3 class="font-bold text-lg mb-2">Consulting</h3>
+                        <p class="text-sm opacity-90">Proposals, Strategien, Workshops</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">12 Templates</div>
+                    </div>
+
+                    <!-- Gesundheit & Wellness -->
+                    <div class="category-card bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 rounded-xl text-white cursor-pointer" onclick="selectCategory('health')">
+                        <div class="text-3xl mb-3">🏥</div>
+                        <h3 class="font-bold text-lg mb-2">Gesundheit</h3>
+                        <p class="text-sm opacity-90">Medical Content, Wellness, Aufklärung</p>
+                        <div class="mt-3 text-xs bg-white/20 rounded-full px-3 py-1 inline-block">8 Templates</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt Configuration (Hidden initially) -->
+        <div id="promptConfig" class="bg-white rounded-3xl shadow-2xl overflow-hidden" style="display: none;">
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-2">🎛️ Prompt Konfiguration</h2>
+                        <p class="opacity-90" id="categoryTitle">Marketing & Advertising</p>
+                    </div>
+                    <button onclick="backToCategories()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition-all duration-300">
+                        ← Zurück
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 p-8">
+                <!-- Configuration Form -->
+                <div class="space-y-6">
+                    <!-- Template Selection -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">🎨 Template auswählen</label>
+                        <select id="templateSelect" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
+                            <option value="">Template wählen...</option>
+                        </select>
+                    </div>
+
+                    <!-- Industry Selection -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">🏭 Branche</label>
+                        <select id="industrySelect" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
+                            <option value="">Branche auswählen...</option>
+                            <option value="E-Commerce / Online Shop">E-Commerce / Online Shop</option>
+                            <option value="SaaS / Software">SaaS / Software</option>
+                            <option value="Beratung / Consulting">Beratung / Consulting</option>
+                            <option value="Gesundheit / Wellness">Gesundheit / Wellness</option>
+                            <option value="Bildung / Kurse">Bildung / Kurse</option>
+                            <option value="Immobilien">Immobilien</option>
+                            <option value="Fitness / Sport">Fitness / Sport</option>
+                            <option value="Finanzen / Investment">Finanzen / Investment</option>
+                            <option value="Reisen / Tourismus">Reisen / Tourismus</option>
+                            <option value="Food & Beverage">Food & Beverage</option>
+                            <option value="Fashion / Beauty">Fashion / Beauty</option>
+                            <option value="Automotive">Automotive</option>
+                            <option value="B2B Services">B2B Services</option>
+                            <option value="Non-Profit">Non-Profit</option>
+                        </select>
+                    </div>
+
+                    <!-- Target Audience -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">👥 Zielgruppe</label>
+                        <select id="audienceType" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm mb-3">
+                            <option value="">Zielgruppen-Typ...</option>
+                            <option value="B2B (Business to Business)">B2B (Business to Business)</option>
+                            <option value="B2C (Business to Consumer)">B2C (Business to Consumer)</option>
+                            <option value="D2C (Direct to Consumer)">D2C (Direct to Consumer)</option>
+                            <option value="B2B2C (Business to Business to Consumer)">B2B2C</option>
+                        </select>
+                        <textarea id="targetAudience" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent h-20 text-sm" placeholder="z.B. Startup-Gründer 25-40, technikaffin, Budget-bewusst, wollen schnell skalieren"></textarea>
+                    </div>
+
+                    <!-- Goal/Objective -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">🎯 Ziel / Objective</label>
+                        <input type="text" id="objective" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" placeholder="z.B. Lead-Generierung, Verkauf erhöhen, Brand Awareness">
+                    </div>
+
+                    <!-- Product/Service -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">🛍️ Produkt / Service</label>
+                        <input type="text" id="product" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm" placeholder="z.B. CRM-Software, Online-Kurs, Coaching-Programm">
+                    </div>
+
+                    <!-- Tone & Style -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">🗣️ Tonalität</label>
+                        <select id="toneStyle" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
+                            <option value="">Tonalität wählen...</option>
+                            <option value="Professional & Seriös">Professional & Seriös</option>
+                            <option value="Freundlich & Nahbar">Freundlich & Nahbar</option>
+                            <option value="Autoritär & Vertrauenswürdig">Autoritär & Vertrauenswürdig</option>
+                            <option value="Casual & Locker">Casual & Locker</option>
+                            <option value="Enthusiastisch & Energisch">Enthusiastisch & Energisch</option>
+                            <option value="Emotional & Empathisch">Emotional & Empathisch</option>
+                            <option value="Witzig & Unterhaltsam">Witzig & Unterhaltsam</option>
+                            <option value="Direkt & Ohne Umschweife">Direkt & Ohne Umschweife</option>
+                            <option value="Luxuriös & Exklusiv">Luxuriös & Exklusiv</option>
+                            <option value="Wissenschaftlich & Datengetrieben">Wissenschaftlich & Datengetrieben</option>
+                        </select>
+                    </div>
+
+                    <!-- Special Requirements -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">⚙️ Besondere Anforderungen</label>
+                        <textarea id="specialReqs" class="w-full p-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent h-20 text-sm" placeholder="z.B. Call-to-Action einbauen, bestimmte Keywords verwenden, Länge begrenzen, Social Proof integrieren"></textarea>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <div class="flex gap-4">
+                        <button onclick="generatePrompt()" class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 shadow-lg text-lg">
+                            🚀 Prompt generieren
+                        </button>
+                        <button onclick="resetForm()" class="bg-gray-500 text-white py-4 px-8 rounded-xl font-bold hover:bg-gray-600 transition-all duration-300">
+                            🔄 Reset
+                        </button>
+                    </div>
+
+                    <!-- AI Integration -->
+                    <div id="aiSection" style="display:none;" class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6">
+                        <h3 class="font-bold text-blue-800 mb-4 flex items-center gap-2 text-lg">
+                            🤖 AI Content Generation
+                        </h3>
+                        <button onclick="sendToAI()" id="aiButton" class="w-full py-4 px-8 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 text-lg">
+                            🎯 AI Content erstellen lassen
+                        </button>
+                        <div id="aiError" style="display:none;" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm"></div>
+                    </div>
+                </div>
+
+                <!-- Generated Prompt Display -->
+                <div class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-2xl font-bold text-gray-800">✨ Generierter Prompt</h2>
+                        <div class="flex gap-2">
+                            <button onclick="copyPrompt()" id="copyButton" style="display:none;" class="flex items-center gap-2 px-4 py-2 rounded-xl font-semibold transition-all duration-300 bg-blue-500 text-white hover:bg-blue-600">
+                                📋 Kopieren
+                            </button>
+                            <button onclick="saveFavorite()" id="favoriteButton" style="display:none;" class="flex items-center gap-2 px-4 py-2 rounded-xl font-semibold transition-all duration-300 bg-yellow-500 text-white hover:bg-yellow-600">
+                                ⭐ Favorit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 min-h-80">
+                        <div id="promptOutput" class="flex items-center justify-center h-full text-gray-500">
+                            <div class="text-center">
+                                <div class="text-6xl mb-4 opacity-50">🎯</div>
+                                <p class="text-xl">Konfiguriere deinen Prompt</p>
+                                <p class="text-sm mt-2">Wähle Template und fülle die Felder aus</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Response -->
+                    <div id="aiResponse" style="display:none;" class="space-y-4">
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                            🤖 AI-generierter Content
+                        </h3>
+                        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 max-h-96 overflow-y-auto">
+                            <div id="aiContent" class="whitespace-pre-wrap text-sm text-gray-800 leading-relaxed"></div>
+                        </div>
+                        <button onclick="copyAIContent()" class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-all duration-300">
+                            📋 AI-Content kopieren
+                        </button>
+                    </div>
+
+                    <!-- Quick Tips -->
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+                        <h3 class="font-bold text-green-800 mb-2">💡 Pro-Tipps für bessere Prompts</h3>
+                        <ul class="text-green-700 text-sm space-y-1">
+                            <li>• Sei so spezifisch wie möglich bei der Zielgruppe</li>
+                            <li>• Definiere klare, messbare Ziele</li>
+                            <li>• Nutze branchenspezifische Keywords</li>
+                            <li>• Teste verschiedene Tonalitäten</li>
+                            <li>• Speichere erfolgreiche Prompts als Favoriten</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" style="display:none;" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-y-auto">
+            <div class="bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold">📜 Prompt-Verlauf</h2>
+                    <button onclick="closeHistory()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg">✕</button>
+                </div>
+            </div>
+            <div id="historyContent" class="p-6">
+                <p class="text-gray-500 text-center">Noch keine Prompts erstellt</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentPrompt = '';
+        let currentAIContent = '';
+        let currentCategory = '';
+        let promptHistory = JSON.parse(localStorage.getItem('promptHistory') || '[]');
+        let favoritePrompts = JSON.parse(localStorage.getItem('favoritePrompts') || '[]');
+
+        // Template definitions
+        const templates = {
+            marketing: [
+                { id: 'facebook_ad', name: 'Facebook/Instagram Ad', desc: 'Werbeanzeige für soziale Medien' },
+                { id: 'google_ad', name: 'Google Ads', desc: 'Responsive Suchanzeige' },
+                { id: 'email_marketing', name: 'Email Marketing', desc: 'Newsletter oder Kampagne' },
+                { id: 'social_media_post', name: 'Social Media Post', desc: 'Instagram, LinkedIn, TikTok' },
+                { id: 'landing_page', name: 'Landing Page Copy', desc: 'Verkaufsseite oder Lead-Magnet' },
+                { id: 'video_ad_script', name: 'Video-Ad Script', desc: 'Script für Werbevideo' }
+            ],
+            sales: [
+                { id: 'cold_email', name: 'Cold Email', desc: 'Kaltakquise per E-Mail' },
+                { id: 'sales_letter', name: 'Sales Letter', desc: 'Verkaufstext für Produkt/Service' },
+                { id: 'objection_handling', name: 'Einwandbehandlung', desc: 'Antworten auf Kundeneinwände' },
+                { id: 'proposal', name: 'Business Proposal', desc: 'Angebot oder Vorschlag' },
+                { id: 'follow_up', name: 'Follow-Up Sequenz', desc: 'Nachfass-E-Mails' },
+                { id: 'closing_script', name: 'Closing Script', desc: 'Abschluss-Gespräch' }
+            ],
+            content: [
+                { id: 'blog_post', name: 'Blog Article', desc: 'SEO-optimierter Blogartikel' },
+                { id: 'youtube_script', name: 'YouTube Script', desc: 'Video-Content mit Hook' },
+                { id: 'podcast_content', name: 'Podcast Content', desc: 'Interview-Fragen oder Monolog' },
+                { id: 'newsletter', name: 'Newsletter', desc: 'E-Mail Newsletter' },
+                { id: 'social_carousel', name: 'Social Media Carousel', desc: 'Mehrteilige Posts' },
+                { id: 'case_study', name: 'Case Study', desc: 'Erfolgsgeschichte' }
+            ],
+            business: [
+                { id: 'pitch_deck', name: 'Pitch Deck', desc: 'Investor-Präsentation' },
+                { id: 'business_plan', name: 'Business Plan', desc: 'Geschäftsplan Executive Summary' },
+                { id: 'job_posting', name: 'Stellenausschreibung', desc: 'Recruiting-Text' },
+                { id: 'company_description', name: 'Unternehmensbeschreibung', desc: 'About Us Seite' },
+                { id: 'press_release', name: 'Pressemitteilung', desc: 'PR-Ankündigung' }
+            ],
+            ecommerce: [
+                { id: 'product_description', name: 'Produktbeschreibung', desc: 'Shop-Produktseite' },
+                { id: 'category_page', name: 'Kategorie-Beschreibung', desc: 'Shop-Kategorieseite' },
+                { id: 'review_response', name: 'Review-Antworten', desc: 'Antworten auf Kundenbewertungen' },
+                { id: 'abandoned_cart', name: 'Abandoned Cart Email', desc: 'Warenkorb-Abbruch E-Mail' },
+                { id: 'upsell_script', name: 'Upsell Script', desc: 'Zusatzverkauf' }
+            ],
+            saas: [
+                { id: 'feature_announcement', name: 'Feature Announcement', desc: 'Neue Funktion vorstellen' },
+                { id: 'onboarding_email', name: 'Onboarding Email', desc: 'Nutzer-Einführung' },
+                { id: 'changelog', name: 'Changelog', desc: 'Update-Notizen' },
+                { id: 'help_documentation', name: 'Help Documentation', desc: 'Hilfe-Artikel' },
+                { id: 'user_feedback', name: 'User Feedback Request', desc: 'Feedback sammeln' }
+            ],
+            consulting: [
+                { id: 'consulting_proposal', name: 'Beratungs-Angebot', desc: 'Consulting Proposal' },
+                { id: 'strategy_document', name: 'Strategie-Dokument', desc: 'Strategische Empfehlung' },
+                { id: 'workshop_outline', name: 'Workshop-Outline', desc: 'Seminar-Struktur' },
+                { id: 'assessment_report', name: 'Assessment Report', desc: 'Analyse-Bericht' }
+            ],
+            health: [
+                { id: 'health_content', name: 'Gesundheits-Content', desc: 'Aufklärungs-Artikel' },
+                { id: 'wellness_program', name: 'Wellness-Programm', desc: 'Gesundheits-Angebot' },
+                { id: 'patient_communication', name: 'Patienten-Kommunikation', desc: 'Medizinische Information' },
+                { id: 'health_newsletter', name: 'Gesundheits-Newsletter', desc: 'Health-Content Newsletter' }
+            ]
+        };
+
+        // Category titles
+        const categoryTitles = {
+            marketing: 'Marketing & Advertising',
+            sales: 'Sales & Vertrieb', 
+            content: 'Content Creation',
+            business: 'Business Development',
+            ecommerce: 'E-Commerce',
+            saas: 'SaaS & Tech',
+            consulting: 'Consulting',
+            health: 'Gesundheit & Wellness'
+        };
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('promptsCreated').textContent = promptHistory.length;
+        }
+
+        // Select category
+        function selectCategory(category) {
+            currentCategory = category;
+            document.getElementById('categoryTitle').textContent = categoryTitles[category];
+            
+            // Hide category selection, show config
+            document.querySelector('.bg-white.rounded-3xl.shadow-2xl.overflow-hidden.mb-8').style.display = 'none';
+            document.getElementById('promptConfig').style.display = 'block';
+            
+            // Populate templates
+            const templateSelect = document.getElementById('templateSelect');
+            templateSelect.innerHTML = '<option value="">Template wählen...</option>';
+            
+            templates[category].forEach(template => {
+                const option = document.createElement('option');
+                option.value = template.id;
+                option.textContent = `${template.name} - ${template.desc}`;
+                templateSelect.appendChild(option);
+            });
+        }
+
+        // Back to categories
+        function backToCategories() {
+            document.querySelector('.bg-white.rounded-3xl.shadow-2xl.overflow-hidden.mb-8').style.display = 'block';
+            document.getElementById('promptConfig').style.display = 'none';
+            currentCategory = '';
+        }
+
+        // Generate prompt
+        function generatePrompt() {
+            const template = document.getElementById('templateSelect').value;
+            const industry = document.getElementById('industrySelect').value;
+            const audienceType = document.getElementById('audienceType').value;
+            const targetAudience = document.getElementById('targetAudience').value;
+            const objective = document.getElementById('objective').value;
+            const product = document.getElementById('product').value;
+            const toneStyle = document.getElementById('toneStyle').value;
+            const specialReqs = document.getElementById('specialReqs').value;
+
+            if (!template) {
+                alert('Bitte wähle zuerst ein Template aus!');
+                return;
+            }
+
+            // Find template details
+            const templateData = templates[currentCategory].find(t => t.id === template);
+            
+            currentPrompt = `🚀 AI CONTENT GENERATOR - ${categoryTitles[currentCategory].toUpperCase()}
+
+📋 CONTENT-TYP: ${templateData.name}
+${templateData.desc}
+
+🏭 BRANCHE & KONTEXT:
+${industry || '[Branche definieren]'}
+
+👥 ZIELGRUPPE:
+Typ: ${audienceType || '[B2B/B2C definieren]'}
+Details: ${targetAudience || '[Zielgruppe spezifizieren - Alter, Interessen, Probleme, Ziele]'}
+
+🛍️ PRODUKT/SERVICE:
+${product || '[Produkt/Service beschreiben]'}
+
+🎯 ZIEL & OBJECTIVE:
+${objective || '[Konkretes Ziel definieren - Verkauf, Leads, Awareness, etc.]'}
+
+🗣️ TONALITÄT & STIL:
+${toneStyle || '[Tonalität wählen]'}
+
+⚙️ SPEZIELLE ANFORDERUNGEN:
+${specialReqs || '[Besondere Anforderungen, CTAs, Keywords, Länge, etc.]'}
+
+📐 FORMAT-SPEZIFIKATIONEN:
+- Optimiert für: ${getFormatSpecs(template)}
+- Call-to-Action: Ja, klar und handlungsorientiert
+- Zielgruppensprache: Passend zur definierten Audience
+- Branchenkontext: ${industry || 'Universell'}
+
+🎭 KREATIVE RICHTLINIEN:
+- Verwende überzeugende Headlines/Hooks
+- Integriere Social Proof wenn sinnvoll
+- Nutze Storytelling-Elemente
+- Schaffe Urgency/Knappheit wo angemessen
+- Beachte aktuelle Markttrends
+
+⚡ PERFORMANCE-OPTIMIERUNG:
+- Fokus auf Conversion-Optimierung
+- Psychologische Trigger einbauen
+- Klare Nutzenargumentation
+- Einwandbehandlung integrieren
+
+🛡️ COMPLIANCE & QUALITÄT:
+- Branchenrichtlinien beachten
+- Keine übertriebenen Versprechen
+- Authentisch und glaubwürdig
+- Rechtliche Aspekte berücksichtigen
+
+Erstelle ${templateData.name} das MAXIMALE Conversion-Potenzial hat und alle oben genannten Kriterien erfüllt.`;
+
+            document.getElementById('promptOutput').innerHTML = `<pre class="whitespace-pre-wrap text-sm text-gray-800 font-mono leading-relaxed">${currentPrompt}</pre>`;
+            document.getElementById('copyButton').style.display = 'flex';
+            document.getElementById('favoriteButton').style.display = 'flex';
+            document.getElementById('aiSection').style.display = 'block';
+
+            // Add to history
+            const historyItem = {
+                id: Date.now(),
+                category: currentCategory,
+                template: templateData.name,
+                industry: industry,
+                timestamp: new Date().toLocaleString(),
+                prompt: currentPrompt
+            };
+            promptHistory.unshift(historyItem);
+            localStorage.setItem('promptHistory', JSON.stringify(promptHistory));
+            updateStats();
+        }
+
+        // Get format specifications
+        function getFormatSpecs(templateId) {
+            const specs = {
+                facebook_ad: 'Facebook/Instagram Ads (Text + Visual)',
+                google_ad: 'Google Ads (Headlines + Descriptions)',
+                email_marketing: 'E-Mail Marketing (Subject + Body)',
+                social_media_post: 'Social Media (Hook + Content + CTA)',
+                landing_page: 'Landing Page (Headlines + Copy + CTAs)',
+                video_ad_script: 'Video Script (Hook + Story + CTA)',
+                cold_email: 'Cold Email (Subject + Personal + Value)',
+                sales_letter: 'Sales Letter (Problem + Solution + Proof)',
+                blog_post: 'Blog Article (SEO + Value + Engagement)',
+                youtube_script: 'YouTube (Hook + Content + Retention)',
+                product_description: 'E-Commerce (Features + Benefits + SEO)',
+                pitch_deck: 'Pitch Deck (Problem + Solution + Market)',
+                onboarding_email: 'User Onboarding (Welcome + Next Steps)',
+                consulting_proposal: 'Consulting (Problem + Solution + ROI)'
+            };
+            return specs[templateId] || 'Universelles Business-Format';
+        }
+
+        // Copy prompt
+        function copyPrompt() {
+            navigator.clipboard.writeText(currentPrompt).then(() => {
+                const button = document.getElementById('copyButton');
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Kopiert!';
+                button.className = button.className.replace('bg-blue-500 hover:bg-blue-600', 'bg-green-500');
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.className = button.className.replace('bg-green-500', 'bg-blue-500 hover:bg-blue-600');
+                }, 2000);
+            });
+        }
+
+        // Save as favorite
+        function saveFavorite() {
+            const templateData = templates[currentCategory].find(t => t.id === document.getElementById('templateSelect').value);
+            const favorite = {
+                id: Date.now(),
+                name: `${templateData.name} - ${document.getElementById('industrySelect').value}`,
+                category: currentCategory,
+                prompt: currentPrompt,
+                timestamp: new Date().toLocaleString()
+            };
+            favoritePrompts.unshift(favorite);
+            localStorage.setItem('favoritePrompts', JSON.stringify(favoritePrompts));
+            
+            const button = document.getElementById('favoriteButton');
+            const originalText = button.innerHTML;
+            button.innerHTML = '⭐ Gespeichert!';
+            button.className = button.className.replace('bg-yellow-500 hover:bg-yellow-600', 'bg-green-500');
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.className = button.className.replace('bg-green-500', 'bg-yellow-500 hover:bg-yellow-600');
+            }, 2000);
+        }
+
+        // AI Integration
+        async function sendToAI() {
+            if (!currentPrompt) {
+                document.getElementById('aiError').style.display = 'block';
+                document.getElementById('aiError').textContent = 'Bitte erst einen Prompt generieren!';
+                return;
+            }
+
+            const button = document.getElementById('aiButton');
+            button.innerHTML = '<div class="animate-pulse">🤖 Generiere Content...</div>';
+            button.disabled = true;
+            document.getElementById('aiError').style.display = 'none';
+
+            try {
+                const response = await fetch("https://api.anthropic.com/v1/messages", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: "claude-sonnet-4-20250514",
+                        max_tokens: 4000,
+                        messages: [
+                            { role: "user", content: currentPrompt }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Fehler: ${response.status}`);
+                }
+
+                const data = await response.json();
+                currentAIContent = data.content[0].text;
+                
+                document.getElementById('aiContent').textContent = currentAIContent;
+                document.getElementById('aiResponse').style.display = 'block';
+
+            } catch (err) {
+                document.getElementById('aiError').style.display = 'block';
+                document.getElementById('aiError').textContent = `Fehler: ${err.message}`;
+            } finally {
+                button.innerHTML = '🎯 AI Content erstellen lassen';
+                button.disabled = false;
+            }
+        }
+
+        // Copy AI content
+        function copyAIContent() {
+            navigator.clipboard.writeText(currentAIContent).then(() => {
+                alert('✅ AI-Content wurde kopiert!');
+            });
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('templateSelect').value = '';
+            document.getElementById('industrySelect').value = '';
+            document.getElementById('audienceType').value = '';
+            document.getElementById('targetAudience').value = '';
+            document.getElementById('objective').value = '';
+            document.getElementById('product').value = '';
+            document.getElementById('toneStyle').value = '';
+            document.getElementById('specialReqs').value = '';
+            
+            document.getElementById('promptOutput').innerHTML = `
+                <div class="flex items-center justify-center h-full text-gray-500">
+                    <div class="text-center">
+                        <div class="text-6xl mb-4 opacity-50">🎯</div>
+                        <p class="text-xl">Konfiguriere deinen Prompt</p>
+                        <p class="text-sm mt-2">Wähle Template und fülle die Felder aus</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('copyButton').style.display = 'none';
+            document.getElementById('favoriteButton').style.display = 'none';
+            document.getElementById('aiSection').style.display = 'none';
+            document.getElementById('aiResponse').style.display = 'none';
+            currentPrompt = '';
+            currentAIContent = '';
+        }
+
+        // Show history
+        function showHistory() {
+            const modal = document.getElementById('historyModal');
+            const content = document.getElementById('historyContent');
+            
+            if (promptHistory.length === 0) {
+                content.innerHTML = '<p class="text-gray-500 text-center">Noch keine Prompts erstellt</p>';
+            } else {
+                content.innerHTML = promptHistory.map(item => `
+                    <div class="border border-gray-200 rounded-xl p-4 mb-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-lg">${item.template}</h3>
+                            <span class="text-sm text-gray-500">${item.timestamp}</span>
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">Kategorie: ${categoryTitles[item.category]} | Branche: ${item.industry}</p>
+                        <button onclick="loadHistoryPrompt(${item.id})" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-600">
+                            Laden
+                        </button>
+                    </div>
+                `).join('');
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        // Close history
+        function closeHistory() {
+            document.getElementById('historyModal').style.display = 'none';
+        }
+
+        // Load history prompt
+        function loadHistoryPrompt(id) {
+            const item = promptHistory.find(h => h.id === id);
+            if (item) {
+                currentPrompt = item.prompt;
+                document.getElementById('promptOutput').innerHTML = `<pre class="whitespace-pre-wrap text-sm text-gray-800 font-mono leading-relaxed">${currentPrompt}</pre>`;
+                document.getElementById('copyButton').style.display = 'flex';
+                document.getElementById('favoriteButton').style.display = 'flex';
+                document.getElementById('aiSection').style.display = 'block';
+                closeHistory();
+            }
+        }
+
+        // Event listeners
+        document.getElementById('historyBtn').addEventListener('click', showHistory);
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            if (currentPrompt) {
+                saveFavorite();
+            } else {
+                alert('Erstelle zuerst einen Prompt!');
+            }
+        });
+
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            if (promptHistory.length === 0) {
+                alert('Keine Daten zum Exportieren vorhanden!');
+                return;
+            }
+            
+            const data = {
+                history: promptHistory,
+                favorites: favoritePrompts,
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ai-prompt-suite-export.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Initialize
+        updateStats();
+    </script>
+</body>
+</html>
